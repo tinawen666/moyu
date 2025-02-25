@@ -1,13 +1,9 @@
----
-title: Welcome to my blog
----
-
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>摸鱼人提醒</title>
+    <title>小工具集合</title>
     <style>
         body {
             font-family: 'Microsoft YaHei', sans-serif;
@@ -16,67 +12,52 @@ title: Welcome to my blog
             padding: 20px;
             background-color: #f5f5f5;
         }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .input-area {
-            margin-bottom: 20px;
+        h1 {
+            color: #333;
             text-align: center;
+            margin-bottom: 40px;
         }
-        .input-area input {
-            padding: 8px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
-        .input-area button {
-            padding: 8px 20px;
-            background-color: #1890ff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
         }
-        .reminder {
-            white-space: pre-line;
-            line-height: 1.6;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 4px;
+        .card:hover {
+            transform: translateY(-5px);
         }
-        .emoji {
-            font-size: 1.2em;
+        a {
+            text-decoration: none;
+            color: #333;
         }
-        .copy-btn {
-            margin-left: 10px;
-            background-color: #52c41a;
+        .card h2 {
+            margin: 10px 0;
+            color: #2196F3;
         }
-        .copy-btn:active {
-            background-color: #389e0d;
-        }
-        @keyframes copySuccess {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        .copy-success {
-            animation: copySuccess 0.3s ease-in-out;
+        .card p {
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>摸鱼人日历 🐟</h1>
-        <div class="input-area">
-            <input type="number" id="payday" placeholder="请输入发工资日期（1-31）" min="1" max="31">
-            <button onclick="generateReminder()">生成提醒</button>
-            <button id="copyBtn" onclick="copyReminder()" class="copy-btn">复制文案</button>
-        </div>
-        <div id="reminder" class="reminder"></div>
+    <h1>小工具集合</h1>
+    <div class="grid">
+        <a href="贪吃蛇/index.html" class="card">
+            <h2>贪吃蛇</h2>
+            <p>经典的贪吃蛇小游戏，来挑战一下吧！</p>
+        </a>
+        <a href="摸鱼提醒/index.html" class="card">
+            <h2>摸鱼提醒</h2>
+            <p>工作太久需要休息？让我来提醒你！</p>
+        </a>
     </div>
-    <script src="moyu.js"></script>
 </body>
 </html> 
