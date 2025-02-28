@@ -41,19 +41,25 @@
             }
         }
         
-        /* 添加触控区域样式 */
+        /* 修改触控区域样式 */
         .touch-controls {
             position: relative;
             width: 400px;
             height: 400px;
             display: none;
+            /* 防止触控时出现选择框 */
+            user-select: none;
+            -webkit-user-select: none;
+            /* 防止触控时出现默认行为 */
+            touch-action: none;
         }
         
         .touch-area {
             position: absolute;
             width: 50%;
             height: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            /* 移除背景色，提升性能 */
+            background: transparent;
         }
         
         #touchUp { top: 0; left: 25%; width: 50%; }
@@ -86,35 +92,34 @@
     <script src="game.js"></script>
     <!-- 添加触控控制脚本 -->
     <script>
-        // 检测是否为移动设备
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
         if (isMobile) {
             const touchControls = document.querySelector('.touch-controls');
             const canvas = document.getElementById('gameCanvas');
             
-            // 将触控区域定位到 canvas 上方
             touchControls.style.position = 'absolute';
             touchControls.style.top = canvas.offsetTop + 'px';
             touchControls.style.left = canvas.offsetLeft + 'px';
             
-            // 添加触控事件
-            document.getElementById('touchUp').addEventListener('click', () => {
-                // 模拟按下向上键
-                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowUp'}));
-            });
+            // 防止页面滚动和缩放
+            document.body.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+            }, { passive: false });
             
-            document.getElementById('touchDown').addEventListener('click', () => {
-                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowDown'}));
-            });
+            // 优化的触控处理函数
+            function handleTouch(direction) {
+                return function(e) {
+                    e.preventDefault();
+                    document.dispatchEvent(new KeyboardEvent('keydown', {'key': direction}));
+                };
+            }
             
-            document.getElementById('touchLeft').addEventListener('click', () => {
-                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowLeft'}));
-            });
-            
-            document.getElementById('touchRight').addEventListener('click', () => {
-                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowRight'}));
-            });
+            // 使用 touchstart 替代 click
+            document.getElementById('touchUp').addEventListener('touchstart', handleTouch('ArrowUp'), { passive: false });
+            document.getElementById('touchDown').addEventListener('touchstart', handleTouch('ArrowDown'), { passive: false });
+            document.getElementById('touchLeft').addEventListener('touchstart', handleTouch('ArrowLeft'), { passive: false });
+            document.getElementById('touchRight').addEventListener('touchstart', handleTouch('ArrowRight'), { passive: false });
         }
     </script>
 </body>
