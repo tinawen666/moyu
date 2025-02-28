@@ -40,14 +40,82 @@
                 font-size: 18px;
             }
         }
+        
+        /* 添加触控区域样式 */
+        .touch-controls {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: none;
+        }
+        
+        .touch-area {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        #touchUp { top: 0; left: 25%; width: 50%; }
+        #touchDown { bottom: 0; left: 25%; width: 50%; }
+        #touchLeft { top: 25%; left: 0; height: 50%; }
+        #touchRight { top: 25%; right: 0; height: 50%; }
+        
+        @media (max-width: 480px) {
+            .touch-controls {
+                display: block;
+                width: 320px;
+                height: 320px;
+            }
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <!-- 添加触控区域 -->
+    <div class="touch-controls">
+        <div class="touch-area" id="touchUp"></div>
+        <div class="touch-area" id="touchDown"></div>
+        <div class="touch-area" id="touchLeft"></div>
+        <div class="touch-area" id="touchRight"></div>
+    </div>
     <div class="controls">
         <button id="startBtn">开始游戏</button>
         <button id="stopBtn">停止游戏</button>
     </div>
     <script src="game.js"></script>
+    <!-- 添加触控控制脚本 -->
+    <script>
+        // 检测是否为移动设备
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            const touchControls = document.querySelector('.touch-controls');
+            const canvas = document.getElementById('gameCanvas');
+            
+            // 将触控区域定位到 canvas 上方
+            touchControls.style.position = 'absolute';
+            touchControls.style.top = canvas.offsetTop + 'px';
+            touchControls.style.left = canvas.offsetLeft + 'px';
+            
+            // 添加触控事件
+            document.getElementById('touchUp').addEventListener('click', () => {
+                // 模拟按下向上键
+                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowUp'}));
+            });
+            
+            document.getElementById('touchDown').addEventListener('click', () => {
+                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowDown'}));
+            });
+            
+            document.getElementById('touchLeft').addEventListener('click', () => {
+                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowLeft'}));
+            });
+            
+            document.getElementById('touchRight').addEventListener('click', () => {
+                document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'ArrowRight'}));
+            });
+        }
+    </script>
 </body>
 </html> 
