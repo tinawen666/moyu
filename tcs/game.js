@@ -30,6 +30,7 @@ function updateSnake() {
     
     if (head.x === food.x && head.y === food.y) {
         generateFood();
+        updateScore();
     } else {
         snake.pop();
     }
@@ -79,7 +80,7 @@ function generateFood() {
 function gameOver() {
     isGameRunning = false;
     clearInterval(gameInterval);
-    alert('游戏结束！');
+    showGameOver();
 }
 
 // 开始游戏
@@ -93,8 +94,11 @@ function startGame() {
     generateFood();
     isGameRunning = true;
     
-    // 启动游戏循环
-    gameInterval = setInterval(gameLoop, 100);
+    // 启动游戏循环，使用初始慢速度
+    if (gameInterval) {
+        clearInterval(gameInterval);
+    }
+    gameInterval = setInterval(gameLoop, 300);
 }
 
 // 停止游戏
@@ -125,4 +129,48 @@ document.addEventListener('keydown', (event) => {
 
 // 按钮事件监听
 startBtn.addEventListener('click', startGame);
-stopBtn.addEventListener('click', stopGame); 
+stopBtn.addEventListener('click', stopGame);
+
+// 为了更好地管理速度，添加速度常量
+const INITIAL_SPEED = 300;  // 初始速度（较慢）
+const FAST_SPEED = 100;     // 达到10分后的速度（较快）
+
+// 修改 updateScore 函数
+function updateScore() {
+    const currentScoreElement = document.getElementById('currentScore');
+    const score = snake.length - 1;
+    currentScoreElement.textContent = score;
+    
+    // 当分数达到10时加快速度
+    if (score === 10) {
+        clearInterval(gameInterval);
+        gameInterval = setInterval(gameLoop, FAST_SPEED);
+    }
+}
+
+// 在游戏结束时显示弹框
+function showGameOver() {
+    const finalScoreElement = document.getElementById('finalScore');
+    const currentScore = document.getElementById('currentScore').textContent;
+    finalScoreElement.textContent = currentScore;
+    document.getElementById('gameOverModal').style.display = 'block';
+}
+
+// 在游戏重启时重置状态
+document.addEventListener('restartGame', function() {
+    // 重置蛇的位置和长度
+    snake = [{ x: 10, y: 10 }];
+    // 重置食物位置
+    generateFood();
+    // 重置方向
+    dx = 1;
+    dy = 0;
+    // 重置分数显示
+    document.getElementById('currentScore').textContent = '0';
+    // 启动游戏循环，使用初始慢速度
+    isGameRunning = true;
+    if (gameInterval) {
+        clearInterval(gameInterval);
+    }
+    gameInterval = setInterval(gameLoop, 300); // 改回初始慢速度
+}); 
