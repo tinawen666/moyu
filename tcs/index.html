@@ -74,6 +74,32 @@
                 height: 320px;
             }
         }
+        
+        /* 添加分数显示样式 */
+        .score-display {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        /* 游戏结束弹窗样式 */
+        .game-over-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -88,6 +114,18 @@
     <div class="controls">
         <button id="startBtn">开始游戏</button>
         <button id="stopBtn">停止游戏</button>
+    </div>
+    <div class="score-display">
+        当前得分: <span id="currentScore">0</span>
+    </div>
+    
+    <!-- 添加游戏结束弹窗 -->
+    <div class="game-over-modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2>游戏结束!</h2>
+            <p>最终得分: <span id="finalScore">0</span></p>
+        </div>
+        <button onclick="restartGame()">重新开始</button>
     </div>
     <script src="game.js"></script>
     <!-- 添加触控控制脚本 -->
@@ -120,6 +158,14 @@
             document.getElementById('touchDown').addEventListener('touchstart', handleTouch('ArrowDown'), { passive: false });
             document.getElementById('touchLeft').addEventListener('touchstart', handleTouch('ArrowLeft'), { passive: false });
             document.getElementById('touchRight').addEventListener('touchstart', handleTouch('ArrowRight'), { passive: false });
+        }
+        
+        // 添加重启游戏函数
+        function restartGame() {
+            document.getElementById('gameOverModal').style.display = 'none';
+            document.getElementById('currentScore').textContent = '0';
+            // 这里需要在 game.js 中实现重置游戏的逻辑
+            document.dispatchEvent(new Event('restartGame'));
         }
     </script>
 </body>
